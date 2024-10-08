@@ -4,16 +4,22 @@ import main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class TileManager {
     GamePanel gp;
     Tile[] tile;
+    int mapTileNumber[][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10]; // 10 different types of tiles, modify as needed
+        mapTileNumber = new int[gp.maxScreenCol][gp.maxScreenRow];
         getTileImage();
+        loadMap("/maps/map01.txt");
     }
 
     public void getTileImage() { // load tile images
@@ -30,6 +36,31 @@ public class TileManager {
         }
     }
 
+    public void loadMap(String filePath) { // place all tilemap numbers in a mtrix
+        try {
+            InputStream is = getClass().getResourceAsStream(filePath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is)); // reads the txt file
+            int col = 0;
+            int row = 0;
+            while(col < gp.maxScreenCol && row < gp.maxScreenRow) {
+                String line = br.readLine(); // get line of txt file as string
+                while(col < gp.maxScreenCol) {
+                    String[] numbers = line.split(" "); // split the line in multiple strings each being one number
+                    int numb = Integer.parseInt(numbers[col]);
+                    mapTileNumber[col][row] = numb;
+                    col++;
+                }
+                if(col == gp.maxScreenCol) {
+                    col = 0;
+                    row++;
+                }
+            }
+            br.close();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void draw(Graphics2D g2) {
         int col = 0;
         int row = 0;
@@ -37,8 +68,9 @@ public class TileManager {
         int y = 0;
 
         while(col < gp.maxScreenCol && row < gp.maxScreenRow) {
+            int tileNum = mapTileNumber[col][row]; // number in matrix giving what type of tile should be painted
             // starts by drawing a line of tiles
-            g2.drawImage(tile[0].image, x, y, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(tile[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
             col++;
             x += gp.tileSize;
             // goes to next line when one is finished
