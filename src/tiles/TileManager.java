@@ -83,7 +83,7 @@ public class TileManager {
             // starts by drawing a line of tiles
             // if statement to draw only if the tile is visible by the player to save resources
             // "+ gp.tileSize" : we draw every visible tile + 1 in every direction so the camera movement is smoother
-            if(worldX + gp.tileSize> gp.player.worldX - gp.player.screenX &&
+            if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
                     worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
                     worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
                     worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
