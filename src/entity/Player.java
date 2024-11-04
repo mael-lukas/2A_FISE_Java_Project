@@ -12,16 +12,23 @@ public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
 
+    public final int screenX;
+    public final int screenY;
+
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
+        // player position on the screen, here basically always at the center
+        screenX = (gp.screenWidth-gp.tileSize) / 2;
+        screenY = (gp.screenHeight-gp.tileSize) / 2;
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
+        // player start position in the whole map
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
     }
@@ -45,19 +52,19 @@ public class Player extends Entity {
         if(keyH.upPressed || keyH.leftPressed || keyH.downPressed || keyH.rightPressed) {
             if(keyH.upPressed) {
                 direction = "up";
-                y -= speed;  // y increases while going down
+                worldY -= speed;  // y increases while going down
             }
             else if(keyH.leftPressed) {
                 direction = "left";
-                x -= speed; // x increases while going right
+                worldX -= speed; // x increases while going right
             }
             else if(keyH.downPressed) {
                 direction = "down";
-                y += speed;
+                worldY += speed;
             }
             else if(keyH.rightPressed) {
                 direction = "right";
-                x += speed;
+                worldX += speed;
             }
             // sprite animation
             spriteCounter++;
@@ -109,6 +116,6 @@ public class Player extends Entity {
                 }
                 break;
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null); // draw image at (x,y) with size tileSize, image observer at null
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null); // draw image at (x,y) with size tileSize, image observer at null
     }
 }
