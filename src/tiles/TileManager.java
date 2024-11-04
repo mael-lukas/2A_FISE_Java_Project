@@ -81,7 +81,14 @@ public class TileManager {
             int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
             // starts by drawing a line of tiles
-            g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            // if statement to draw only if the tile is visible by the player to save resources
+            // "+ gp.tileSize" : we draw every visible tile + 1 in every direction so the camera movement is smoother
+            if(worldX + gp.tileSize> gp.player.worldX - gp.player.screenX &&
+                    worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+                    worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
+                    worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            }
             worldCol++;
             // goes to next line when one is finished
             if(worldCol == gp.maxWorldCol) {
