@@ -11,13 +11,13 @@ import java.io.InputStreamReader;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] tile;
-    int mapTileNumber[][];
+    public Tile[] tile;
+    public int mapTileNumbers[][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
         tile = new Tile[10]; // 10 different types of tiles, modify as needed
-        mapTileNumber = new int[gp.maxWorldCol][gp.maxWorldRow];
+        mapTileNumbers = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
         loadMap("/maps/world01.txt");
     }
@@ -26,14 +26,22 @@ public class TileManager {
         try {
             tile[0] = new Tile();
             tile[0].image = ImageIO.read(getClass().getResourceAsStream("/tiles/grass.png"));
+
             tile[1] = new Tile();
             tile[1].image = ImageIO.read(getClass().getResourceAsStream("/tiles/wall.png"));
+            tile[1].collision = true;
+
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/tiles/water.png"));
+            tile[2].collision = true;
+
             tile[3] = new Tile();
             tile[3].image = ImageIO.read(getClass().getResourceAsStream("/tiles/dirt.png"));
+
             tile[4] = new Tile();
             tile[4].image = ImageIO.read(getClass().getResourceAsStream("/tiles/tree.png"));
+            tile[4].collision = true;
+
             tile[5] = new Tile();
             tile[5].image = ImageIO.read(getClass().getResourceAsStream("/tiles/path.png"));
         } catch (IOException e) {
@@ -52,7 +60,7 @@ public class TileManager {
                 while(col < gp.maxWorldCol) {
                     String[] numbers = line.split(" "); // split the line in multiple strings each being one number
                     int numb = Integer.parseInt(numbers[col]);
-                    mapTileNumber[col][row] = numb;
+                    mapTileNumbers[col][row] = numb;
                     col++;
                 }
                 if(col == gp.maxWorldCol) {
@@ -71,7 +79,7 @@ public class TileManager {
         int worldRow = 0;
 
         while(worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
-            int tileNum = mapTileNumber[worldCol][worldRow]; // number in matrix giving what type of tile should be painted
+            int tileNum = mapTileNumbers[worldCol][worldRow]; // number in matrix giving what type of tile should be painted
 
             // tile position on the whole map
             int worldX = worldCol * gp.tileSize;

@@ -26,10 +26,14 @@ public class GamePanel extends JPanel implements Runnable {
     // FPS
     int fps = 60; // number of update and repaint per second
 
+    TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread; // game thread for game loop
+
+    public CollisionManager cManager = new CollisionManager(this);
+
     public Player player = new Player(this,keyH);
-    TileManager tileM = new TileManager(this);
+
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth,screenHeight)); // size of window 768x576

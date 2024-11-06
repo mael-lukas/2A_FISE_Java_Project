@@ -21,6 +21,10 @@ public class Player extends Entity {
         // player position on the screen, here basically always at the center
         screenX = (gp.screenWidth-gp.tileSize) / 2;
         screenY = (gp.screenHeight-gp.tileSize) / 2;
+
+        // hitbox x & y are chosen with the *3 scale in mind
+        hitbox = new Rectangle(12,21,27,24);
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -49,23 +53,43 @@ public class Player extends Entity {
     }
 
     public void update() { // in game loop so executed 60 times per second
+        // set which direction the player will be looking according to key press
         if(keyH.upPressed || keyH.leftPressed || keyH.downPressed || keyH.rightPressed) {
             if(keyH.upPressed) {
                 direction = "up";
-                worldY -= speed;  // y increases while going down
             }
             else if(keyH.leftPressed) {
                 direction = "left";
-                worldX -= speed; // x increases while going right
             }
             else if(keyH.downPressed) {
                 direction = "down";
-                worldY += speed;
             }
             else if(keyH.rightPressed) {
                 direction = "right";
-                worldX += speed;
             }
+
+            // check tile collision
+            collisionOn = false;
+            gp.cManager.checkTile(this);
+
+            // if no collision, player can move
+            if (collisionOn == false) {
+                switch(direction) {
+                    case "up":
+                        worldY -= speed;  // y increases while going down
+                        break;
+                    case "left":
+                        worldX -= speed; // x increases while going right
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
+            }
+
             // sprite animation
             spriteCounter++;
             if(spriteCounter > 10) { // changes sprite every 10 frames or 6 times per second
