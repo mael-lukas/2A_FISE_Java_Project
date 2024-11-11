@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tiles.TileManager;
 
 import javax.swing.*;
@@ -32,7 +33,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     public CollisionManager cManager = new CollisionManager(this);
 
+    public AssetSetter aSetter = new AssetSetter(this);
+
     public Player player = new Player(this,keyH);
+
+    // list of objects, changeable while running, size of list is max number of objects displayed at the same time
+    public SuperObject obj[] = new SuperObject[10];
+
 
 
     public GamePanel() {
@@ -41,6 +48,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // increase rendering performance
         this.addKeyListener(keyH); // JPanel can recognize key inputs
         this.setFocusable(true); // game panel can be "focused" to receive key inputs
+    }
+
+    public void setupGame() {
+        aSetter.setObject();
     }
 
     public void startGameThread() {
@@ -90,7 +101,20 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g; // more functionalities than Graphics
-        tileM.draw(g2); // tiles before player so that player is displayed on top of the tiles
+
+        // TILE
+        // tiles before player so that player is displayed on top of the tiles
+        tileM.draw(g2);
+
+        // OBJECT
+        // draw only non-null objects
+        for(int i = 0; i < obj.length; i++) {
+            if(obj[i] != null ) {
+                obj[i].draw(g2,this);
+            }
+        }
+
+        // PLAYER
         player.draw(g2);
         g2.dispose(); // dispose of Graphics to free memory
     }
