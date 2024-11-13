@@ -24,6 +24,12 @@ public class Player extends Entity {
 
         // hitbox x & y are chosen with the *3 scale in mind
         hitbox = new Rectangle(12,21,27,24);
+        hitbox.x = 12;
+        hitbox.y = 21;
+        hitboxDefaultX = hitbox.x;
+        hitboxDefaultY = hitbox.y;
+        hitbox.width = 27;
+        hitbox.height = 24;
 
         setDefaultValues();
         getPlayerImage();
@@ -71,6 +77,9 @@ public class Player extends Entity {
             // check tile collision
             collisionOn = false;
             gp.cManager.checkTile(this);
+
+            // check object collision
+            int objINdex = gp.cManager.checkObject(this, true);
 
             // if no collision, player can move
             if (collisionOn == false) {

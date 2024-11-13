@@ -11,6 +11,9 @@ public class SuperObject {
     public String name;
     public boolean collision = false;
     public int worldX, worldY;
+    public Rectangle hitbox = new Rectangle(0, 0, 48, 48);
+    public int hitboxDefaultX = 0;
+    public int hitboxDefaultY = 0;
 
     public void draw(Graphics2D g2, GamePanel gp) {
         // tile position on the screen = horizontal & vertical distance from the player offset by player position on screen (gp.player.screenX ; gp.player.screenY)

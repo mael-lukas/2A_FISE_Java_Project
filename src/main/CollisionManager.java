@@ -69,4 +69,76 @@ public class CollisionManager {
                 break;
         }
     }
+
+    public int checkObject(Entity entity, boolean isPlayer) {
+        int index = 999;
+        for (int i = 0; i < gp.obj.length; i++) {
+            // checks only non-null object
+            if (gp.obj[i] != null) {
+                // get entity's hitbox position
+                entity.hitbox.x = entity.worldX + entity.hitbox.x;
+                entity.hitbox.y = entity.worldY + entity.hitbox.y;
+                // get object's hitbox position
+                gp.obj[i].hitbox.x = gp.obj[i].worldX + gp.obj[i].hitbox.x;
+                gp.obj[i].hitbox.y = gp.obj[i].worldY + gp.obj[i].hitbox.y;
+
+                switch(entity.direction) {
+                    // calculates future hitbox coordinates if entity tries to move in a direction
+                    // checks collision between entity and object hitboxes
+                    case "up":
+                        entity.hitbox.y -= entity.speed;
+                        if(entity.hitbox.intersects(gp.obj[i].hitbox)) {
+                            // object will stop the entity if it's solid
+                            if(gp.obj[i].collision == true) {
+                                entity.collisionOn = true;
+                            }
+                            // return index of collisionned object only if player touches it because only player can pick up objects
+                            if(isPlayer == true) {
+                                index = i;
+                            }
+                        }
+                        break;
+                    case "left":
+                        entity.hitbox.x -= entity.speed;
+                        if(entity.hitbox.intersects(gp.obj[i].hitbox)) {
+                            if(gp.obj[i].collision == true) {
+                                entity.collisionOn = true;
+                            }
+                            if(isPlayer == true) {
+                                index = i;
+                            }
+                        }
+                        break;
+                    case "down":
+                        entity.hitbox.y += entity.speed;
+                        if(entity.hitbox.intersects(gp.obj[i].hitbox)) {
+                            if(gp.obj[i].collision == true) {
+                                entity.collisionOn = true;
+                            }
+                            if(isPlayer == true) {
+                                index = i;
+                            }
+                        }
+                        break;
+                    case "right":
+                        entity.hitbox.x += entity.speed;
+                        if(entity.hitbox.intersects(gp.obj[i].hitbox)) {
+                            if(gp.obj[i].collision == true) {
+                                entity.collisionOn = true;
+                            }
+                            if(isPlayer == true) {
+                                index = i;
+                            }
+                        }
+                        break;
+                }
+                // resets hitbox positions after calculations
+                entity.hitbox.x = entity.hitboxDefaultX;
+                entity.hitbox.y = entity.hitboxDefaultY;
+                gp.obj[i].hitbox.x = gp.obj[i].hitboxDefaultX;
+                gp.obj[i].hitbox.y = gp.obj[i].hitboxDefaultY;
+            }
+        }
+        return index;
+    }
 }
