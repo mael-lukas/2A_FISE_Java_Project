@@ -12,5 +12,9 @@ public class Obj_Key extends SuperObject {
         }catch(IOException e) {
             e.printStackTrace();
         }
+        this.hitbox.x = 3;
+        this.hitbox.y = 9;
+        this.hitbox.width = 42;
+        this.hitbox.height = 33;
     }
 }
