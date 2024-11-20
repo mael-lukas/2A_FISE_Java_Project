@@ -15,6 +15,8 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
 
+    int ownedKeys = 0;
+
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
@@ -79,7 +81,8 @@ public class Player extends Entity {
             gp.cManager.checkTile(this);
 
             // check object collision
-            int objINdex = gp.cManager.checkObject(this, true);
+            int objIndex = gp.cManager.checkObject(this, true);
+            pickUpObject(objIndex);
 
             // if no collision, player can move
             if (collisionOn == false) {
@@ -109,6 +112,28 @@ public class Player extends Entity {
                     spriteNumber = 1;
                 }
                 spriteCounter = 0;
+            }
+        }
+    }
+
+    public void pickUpObject(int index) {
+        // index = 999 means we did not touch any object
+        if(index != 999) {
+            String objectName = gp.obj[index].name;
+            switch(objectName) {
+                case "key":
+                    ownedKeys++;
+                    gp.obj[index] = null; // deletes object
+                    System.out.println("Keys: " + ownedKeys);
+                    break;
+                case "door":
+                    if(ownedKeys > 0) {
+                        gp.obj[index] = null;
+                        ownedKeys--;
+                        System.out.println("Keys: " + ownedKeys);
+                        System.out.println("You unlocked the door");
+                    }
+                    break;
             }
         }
     }
